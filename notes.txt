@@ -1,0 +1,42 @@
+what is websocket?
+like http protocol, it helps set up communication. it allows full-duplex communication(bidirectional) both server and client can initiate communication
+websocket is a separate protocol from http
+provides persistent connection between client and server
+
+in order to get an acknowledge : 
+1-) ack to client that server received message:
+
+// client: socket.emit('send',message,(error,ackmsg)=>{ console.log(ackmsg) }  or if no error in cb: socket.emit('send',message,(ackmsg)=>{  }
+
+// server: socket.on('send',(m,acknowledge)=>{            //with error provided in cb
+//         console.log(m)
+//         const filter = new Filter()
+//         if(filter.isProfane(m))
+//         {
+//             return acknowledge('Profanity is not allowed',undefined) //since acknowledge is cb(error,message)
+//         }
+//         io.emit('sendUser',m)
+//         acknowledge(undefined,'Delievered!') // acknowledge is cb fct
+        
+//     })
+
+or if no error provided in callback:
+socket.on('sendLocation',(location,ack)=>{                //just use ack as it is not (ack,error)
+        console.log(location)
+            io.emit('sendLocation',`https://google.com/maps?q=${location.latitude},${location.longitude}`)
+            ack('location delivered!')
+    })   
+
+
+
+
+
+
+
+socket.emit: sends an event to a specific client
+io.emit: sends an event to every connected client
+socket.join( ) : adds the user to a specific room(server) where only people in that rooom can here eachothers
+socket.broadcast.emit: sends an event to every connected client except the one doing the action
+io.to(room).emit:emits an event to everybody in a specific room
+socekt.broadcast.to(room).emit: sends an evemt fpr everyone except for the specific client in a specific chatrrom.
+for the last 2 options you should use brfore soecket.join(room)
